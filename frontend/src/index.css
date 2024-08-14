@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .input-form {
+        @apply input input-bordered w-96 space-y-2 text-center
+    }
+}
