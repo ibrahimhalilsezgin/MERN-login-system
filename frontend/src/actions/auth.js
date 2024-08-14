@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export async function register(authData) {
     try {
-            const {status} = await axios.post(, authData)
+            const {status} = await axios.post(process.env.host, authData)
 
             
             if(status === 200) {
