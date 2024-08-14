@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export async function register(authData) {
     try {
-            const {status} = await axios.post('http://localhost:3000/register', authData)
+            const {status} = await axios.post(, authData)
 
             
             if(status === 200) {
@@ -23,7 +23,7 @@ export async function register(authData) {
 export async function login(authData) {
 
     try {
-        const {data} = await axios.post('http://localhost:3000/login', authData)
+        const {data} = await axios.post(process.env.host, authData)
 
 
         localStorage.setItem('auth', JSON.stringify(data));
