@@ -1,11 +1,11 @@
 import axios from "axios";
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-
+// import dotenv from "dotenv"
 
 export async function register(authData) {
     try {
-            const {status} = await axios.post(process.env.host, authData)
+            const {status} = await axios.post(import.meta.env.host, authData)
 
             
             if(status === 200) {
@@ -21,10 +21,10 @@ export async function register(authData) {
 
 
 export async function login(authData) {
+    console.log(process.env.host)
 
     try {
-        const {data} = await axios.post(process.env.host, authData)
-
+        const {data} = await axios.post(import.meta.env.host, authData)
 
         localStorage.setItem('auth', JSON.stringify(data));
 
