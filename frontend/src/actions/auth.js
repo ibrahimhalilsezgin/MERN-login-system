@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export async function register(authData) {
     try {
-            const {status} = await axios.post(import.meta.env.host, authData)
+            const {status} = await axios.post(`${import.meta.env.host}/register`, authData)
 
             
             if(status === 200) {
@@ -24,7 +24,7 @@ export async function login(authData) {
     console.log(process.env.host)
 
     try {
-        const {data} = await axios.post(import.meta.env.host, authData)
+        const {data} = await axios.post(`${import.meta.env.host}/login`, authData)
 
         localStorage.setItem('auth', JSON.stringify(data));
 
