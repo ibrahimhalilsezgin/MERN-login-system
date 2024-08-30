@@ -1,41 +1,53 @@
 import express from "express";
+import multer from "multer";
 import bodyParser from "body-parser";
-import cors from "cors"
-import morgan from 'morgan'
-import { configDotenv } from "dotenv";
-import AuthRouter from "./Routers/Auth.router.js";
+import fs from "node:fs";
+import morgan from "morgan";
+import cors from "cors";
 
+    var app = express();
+    app.set("view engine", "ejs")
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(cors())
+    var storage =   multer.diskStorage({
+      destination: function (req, file, callback) {
+        callback(null, './uploads');
+      },
+      filename: function (req, file, callback) {
+        var klasor = fs.readdirSync("./uploads");
+        console.log(file.originalname);    
+        //if()
+        callback(null, file.originalname);
+      }
+    });
+    app.use(morgan('dev'));
 
-import "./Database/connect.js";
-import UserSchema from "./Database/Schemas/User.Schema.js";
-configDotenv();
+    const password = 'test';
+    var upload = multer({ storage : storage}).single('file');
+    app.get("/i/:id", (req, res) => {
+        var id = req.params.id;
+        if(!fs.existsSync(__dirname+`/uploads/${id}`)) return res.status(404).json({statusCode:404, message: 'File not found'});
+        return res.status(200).sendFile(__dirname+`/uploads/${id}`);
+        
+    })
+    // app.get("/",express.static(__dirname+"/uploads"))
+    app.post('/upload',function(req,res){
+      console.log(req.query.pass , password)
 
+      if(req.query.pass !== password){
+        return res.send("Access Denied")
+      }
+        upload(req,res,function(err) {
+            if(err) {
+                console.log(err)
+                return res.end("Error uploading file.");
+            }
+            console.log("file uploaded");
+            res.send('http://cdn.ibrahimhalilsezgin.fun/i/' + req.file.originalname);            
+        });
+    });
 
-const app = express();
-
-
-app.use(morgan('dev'))
-app.use(cors({
-    
-}))
-app.use(bodyParser.urlencoded({
-    extended: true,
-    limit:'30mb'
-}));
-app.use(bodyParser.json({
-    limit:'30mb'
-}));
-
-app.get('/', async (req,res) => {
-    const users = await UserSchema.find({})
-    res.json(users)
-})
-app.use('/', AuthRouter);
-
-
-const PORT = process.env.PORT || 6000;
-
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
+    app.listen(80,function(){
+        console.log("Working on port 3000");
+    });
