@@ -48,6 +48,6 @@ import cors from "cors";
         });
     });
 
-    app.listen(80,function(){
+    app.listen(process.env.PORT || 6000,function(){
         console.log("Working on port 3000");
     });
